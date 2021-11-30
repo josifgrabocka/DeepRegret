@@ -37,5 +37,3 @@ class LoadBenchmark:
         # here load the NB201 metadataset
 
         return md
-
-# load the Taskset benchmark
