@@ -1,6 +1,6 @@
 
 # an abstract HPO method
-class HPOMethod:
+class AbstractHPOMethod:
 
     # initialize a HPO method providing the initial setup as:
     # init_configurations: a list of configuration vectors
