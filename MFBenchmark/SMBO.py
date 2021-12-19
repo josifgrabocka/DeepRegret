@@ -5,20 +5,22 @@ import datetime
 class SMBO:
 
     def __init__(self, task=None, method=None, max_trials=None, max_wallclock_time=None):
+        # store the task and the method
         self.task = task
         self.method = method
+        # store the budget
         self.max_num_trials = max_trials
         self.max_wallclock_time = max_wallclock_time
-        # the HPO history of every step, the list of configurations, the associated fidelities, reponses and wallclock times
-        self.history_configurations = []
-        self.history_fidelities = []
-        self.history_reponses = []
-        self.history_elapsed_runtimes = []
         # a setting for the number of parallel configurations
         self.num_parallel_configurations = 1
 
     # run the HPO
+    # returns a list of (configuration, fidelities, response, elapsed_time)
     def run_hpo(self):
+
+        # the HPO history of every step, the list of configurations, the associated fidelities,
+        # and the corresponding reponses and wallclock times
+        hpo_history = []
 
         # initialize the number of trials and the elapsed wallclock time
         elapsed_num_trials = 0
@@ -54,10 +56,7 @@ class SMBO:
                 # update the number of trials
                 elapsed_num_trials += 1
                 # update the history
-                self.history_configurations.append(conf)
-                self.history_fidelities.append(fid)
-                self.history_reponses.append(response)
-                self.history_elapsed_runtimes.append(elapsed_wallclock_time)
+                hpo_history.append((conf, fid, response, elapsed_wallclock_time))
 
             # return the observation of the initial design to the method, measure the elapsed time
             start_time = datetime.datetime.now()
@@ -65,3 +64,6 @@ class SMBO:
                                 responses=responses, runtimes=runtimes)
             end_time = datetime.datetime.now()
             elapsed_wallclock_time += (end_time - start_time).total_seconds()
+
+        # return the hpo history
+        return hpo_history
