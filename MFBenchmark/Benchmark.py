@@ -102,11 +102,6 @@ class TaskInformation:
         self.unique_fidelities = None
         # the number of unique fidelities
         self.num_unique_fidelities = None
-        # the min and max reponse observed for each unique fidelities
-        # the indices of self.unique_fidelities semantically match the indices of
-        # self.min_response_per_unique_fidelities and self.max_response_per_unique_fidelities
-        self.min_response_per_unique_fidelities = []
-        self.max_response_per_unique_fidelities = []
 
         if task is not None:
             self.name = self.task.name
@@ -122,10 +117,6 @@ class TaskInformation:
             # the unique fidelities among the ones evaluated in the meta-dataset, derived from the self.evaluations
             self.unique_fidelities = self.task.fetch_unique_fidelities()
             self.num_unique_fidelities = len(self.unique_fidelities)
-            # for each unique fidelity fetch the min and max response across all the evaluations
-            for fidelities in self.unique_fidelities:
-                self.min_response_per_unique_fidelities.append(self.task.min_response(fidelities))
-                self.max_response_per_unique_fidelities.append(self.task.max_response(fidelities))
 
         # information line on the task initialization
         logging.info('Task information', self.name, 'with',
