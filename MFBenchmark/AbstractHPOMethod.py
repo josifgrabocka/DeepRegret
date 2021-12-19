@@ -2,15 +2,14 @@
 # an abstract HPO method
 class AbstractHPOMethod:
 
-    # initialize a HPO method providing the initial setup as:
-    # init_configurations: a list of configuration vectors
+    # initialize a HPO method providing task information and the budget as contructor informaiton
     def __init__(self, task_information, max_trials=None, max_wallclock_time=None):
         self.task_information = task_information
         # store the budget
         self.max_num_trials = max_trials
         self.max_wallclock_time = max_wallclock_time
 
-    # suggest a number of next configurations to try
+    # suggests a list of next configurations, and for what fidelity to try those configurations
     # returns a list of tuples (configurations, fidelities), where the length of the list is num_configurations
     # this step is commonly referred to as the acquisition function
     # this method should be run after suggest_initial
