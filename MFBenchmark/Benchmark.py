@@ -77,13 +77,11 @@ class TaskInformation:
                 self.feasible_fidelities.append(self.task.fetch_unique_fidelities(config))
 
 
-
-# an evaluation is a tuple of (configuration, fidelities, responses), where
+# an evaluation is a tuple of (configuration, fidelities, response, runtime), where
 # configuration is a [list of floats] representing the hyperparameter values
 # fidelities is a [list of floats] when many-fidelities are used, OR a single [float] if just one fidelity is used
 # response [float] indicate the response of evaluating a configuration at the respective fidelity
-# runtime [float] indicate the wallclock runtime of evaluating a configuration at the respective fidelity
-# Note: runtimes are in SECONDS
+# runtime [float] indicate the wallclock runtime in seconds of evaluating a configuration at the respective fidelity
 class Evaluation:
     def __init__(self, configuration=None, fidelities=None, response=None, runtime=None):
         self.configuration = configuration

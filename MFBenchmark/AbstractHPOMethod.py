@@ -14,7 +14,7 @@ class AbstractHPOMethod:
     # returns a list of tuples (configurations, fidelities), where the length of the list is num_configurations
     # this step is commonly referred to as the acquisition function
     # this method should be run after suggest_initial
-    def suggest(self, num_configurations=1):
+    def suggest(self):
         return None
 
     # provide the evaluated configurations to the method as observations

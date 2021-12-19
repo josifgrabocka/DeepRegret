@@ -11,8 +11,6 @@ class SMBO:
         # store the budget
         self.max_num_trials = max_trials
         self.max_wallclock_time = max_wallclock_time
-        # a setting for the number of parallel configurations
-        self.num_parallel_configurations = 1
 
     # run the HPO
     # returns a list of (configuration, fidelities, response, elapsed_time)
@@ -40,7 +38,7 @@ class SMBO:
 
             # get the suggested configurations and fidelities from the method
             start_time = datetime.datetime.now()
-            configurations, fidelities = self.method.suggest(self.num_parallel_configurations)
+            configurations, fidelities = self.method.suggest()
             end_time = datetime.datetime.now()
             elapsed_wallclock_time += (end_time - start_time).total_seconds()
 
