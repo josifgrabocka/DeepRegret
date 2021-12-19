@@ -1,8 +1,6 @@
-from MFBenchmark.LoadBenchmark import LoadBenchmark
+from MFBenchmark.Utilities.LoadBenchmark import LoadBenchmark
 
 
 # load the benchmarks
-load_bench = LoadBenchmark(lc_bench_location='')
+load_bench = LoadBenchmark(lc_bench_location='empty')
 benchmark = load_bench.benchmark
-
-# test the benchmark
