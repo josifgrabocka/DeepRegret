@@ -87,6 +87,10 @@ class Task:
                 min_response = eval.response
         return min_response
 
+    # returns the max fidelity of a configuration
+    def max_fidelity(self, configuration):
+        pass
+
     # returns a random sample of evaluations specified with num_evaluations
     # if sample_fidelities=True, the method cuts the learning curves randomly and returns the evaluations
     # of the first M fidelities, where M is a random number between 1 and the max. evaluated fidelity
