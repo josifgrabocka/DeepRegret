@@ -1,5 +1,6 @@
 from MFBenchmark.Benchmark import Benchmark
 from MFBenchmark.Benchmark import MetaDataset
+from MFBenchmark.Benchmark import Task
 
 
 # utility script to load a multi-fidelity benchmark
@@ -7,32 +8,42 @@ from MFBenchmark.Benchmark import MetaDataset
 class LoadBenchmark:
 
     def __init__(self, lc_bench_location=None, taskset_location=None, nb201_location=None):
-        self.benchmark = Benchmark()
 
+        metadatasets = []
         if lc_bench_location is not None:
-            self.benchmark.metadatasets.append(self.load_LCBench(lc_bench_location))
-        if lc_bench_location is not None:
-            self.benchmark.metadatasets.append(self.load_TaskSet(lc_bench_location))
-        if lc_bench_location is not None:
-            self.benchmark.metadatasets.append(self.load_NB201(lc_bench_location))
+            metadatasets.append(self.load_LCBench(lc_bench_location))
+        if taskset_location is not None:
+            metadatasets.append(self.load_TaskSet(taskset_location))
+        if nb201_location is not None:
+            metadatasets.append(self.load_NB201(nb201_location))
+
+        self.benchmark = Benchmark(name='RELEA-MF-Bench', metadatasets=metadatasets)
 
     # load the LCBench benchmark
     def load_LCBench(self, lc_bench_location):
-        md = MetaDataset()
 
-        # here load the lcbench metadataset
+        tasks = []
 
-        return md
+        # read the tasks
+
+        evaluations = []
+        tasks.append(Task(name="nulltask", evaluations=evaluations))
+
+
+        return MetaDataset(name='LCBench', tasks=tasks)
 
     def load_TaskSet(self, taskset_location):
-        md = MetaDataset()
+        tasks = []
 
-        # here load the taskset metadataset
 
-        return md
+        # read the tasks
+
+        return MetaDataset(name='TaskSet', tasks=tasks)
 
     def load_NB201(self, nb201_location):
         md = MetaDataset()
+
+        # read the tasks
 
         # here load the NB201 metadataset
 
