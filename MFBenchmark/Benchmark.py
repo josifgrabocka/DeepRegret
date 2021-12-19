@@ -19,32 +19,11 @@ class MetaDataset:
 # it is a collection of evaluations of the form (configurations, responses)
 class Task:
     def __init__(self, name=None, evaluations=None):
-
+        self.name = name
         # the list of evaluations in the form of instances of the Evaluation class
         self.evaluations = evaluations
-
         # initialize the task_information class that encapsulates the derived information on this task
-        self.task_information = TaskInformation()
-        self.task_information.name = name
-        self.task_information.num_total_evaluations = len(self.evaluations)
-        self.task_information.design_space_dimensionality = len(self.evaluations[0].configuration)
-
-        # the unique configurations among the ones evaluated in the meta-dataset, derived from the self.evaluations
-        self.task_information.unique_configurations = self.fetch_unique_configurations()
-        self.task_information.num_unique_configurations = len(self.task_information.unique_configurations)
-
-        # the unique fidelities among the ones evaluated in the meta-dataset, derived from the self.evaluations
-        self.task_information.unique_fidelities = self.fetch_unique_fidelities()
-        self.task_information.num_unique_fidelities = len(self.task_information.unique_fidelities)
-        # for each unique fidelity fetch the min and max response across all the evaluations
-        for fidelities in self.task_information.unique_fidelities:
-            self.task_information.min_response_per_unique_fidelities.append(self.min_response(fidelities))
-            self.task_information.max_response_per_unique_fidelities.append(self.max_response(fidelities))
-
-        # information line on the task initialization
-        logging.info('Initialized Task', self.task_information.name, 'with',
-                     self.task_information.num_total_evaluations, 'total evaluations, ',
-                     self.task_information.num_unique_configurations, 'unique configurations')
+        self.task_information = TaskInformation(task=self)
 
     # return the unique configurations of the task
     def fetch_unique_configurations(self):
@@ -55,12 +34,17 @@ class Task:
         # return a list of the unique configurations
         return list(set(configs))
 
-    # return the unique configurations of the task
-    def fetch_unique_fidelities(self):
+    # return the unique configurations of the task, either universally configurations=None,
+    # or belonging to one particular configuration
+    def fetch_unique_fidelities(self, configuration=None):
         # read all the configurations in a list
         fidelities = []
         for eval in self.evaluations:
-            fidelities.append(eval.configuration)
+            if configuration is not None:
+                if eval.configuration == configuration:
+                    fidelities.append(eval.fidelities)
+            else:
+                fidelities.append(eval.fidelities)
         # return a list of the unique configurations
         return list(set(fidelities))
 
@@ -87,9 +71,6 @@ class Task:
                 min_response = eval.response
         return min_response
 
-    # returns the max fidelity of a configuration
-    def max_fidelity(self, configuration):
-        pass
 
     # returns a random sample of evaluations specified with num_evaluations
     # if sample_fidelities=True, the method cuts the learning curves randomly and returns the evaluations
@@ -98,9 +79,11 @@ class Task:
 
         pass
 
-# encapsulate the information about a task
+# encapsulate the information about a task, that are needed by HPO methods to decide on the initial design,
+# what configurations and fidelities to suggest, etc.
 class TaskInformation:
-    def __init__(self):
+    def __init__(self, task=None):
+        self.task = task
         # the name of the task
         self.name = None
         # the dimensionality of the design space, a.k.a. number of hyperparameters
@@ -112,6 +95,8 @@ class TaskInformation:
         self.unique_configurations = None
         # the number of unique configurations
         self.num_unique_configurations = None
+        # the unique fidelities for each configuration
+        self.fidelities_per_unique_configurations = []
 
         # a list of the unique fidelities in the task
         self.unique_fidelities = None
@@ -120,9 +105,33 @@ class TaskInformation:
         # the min and max reponse observed for each unique fidelities
         # the indices of self.unique_fidelities semantically match the indices of
         # self.min_response_per_unique_fidelities and self.max_response_per_unique_fidelities
-        self.min_response_per_unique_fidelities = None
-        self.max_response_per_unique_fidelities = None
+        self.min_response_per_unique_fidelities = []
+        self.max_response_per_unique_fidelities = []
 
+        if task is not None:
+            self.name = self.task.name
+            self.num_total_evaluations = len(self.task.evaluations)
+            self.design_space_dimensionality = len(self.task.evaluations[0].configuration)
+
+            # the unique configurations among the ones evaluated in the task, derived from the self.evaluations
+            self.unique_configurations = self.task.fetch_unique_configurations()
+            self.num_unique_configurations = len(self.unique_configurations)
+            for config in self.unique_configurations:
+                self.fidelities_per_unique_configurations.append(self.task.fetch_unique_fidelities(config))
+
+            # the unique fidelities among the ones evaluated in the meta-dataset, derived from the self.evaluations
+            self.unique_fidelities = self.task.fetch_unique_fidelities()
+            self.num_unique_fidelities = len(self.unique_fidelities)
+            # for each unique fidelity fetch the min and max response across all the evaluations
+            for fidelities in self.unique_fidelities:
+                self.min_response_per_unique_fidelities.append(self.task.min_response(fidelities))
+                self.max_response_per_unique_fidelities.append(self.task.max_response(fidelities))
+
+        # information line on the task initialization
+        logging.info('Task information', self.name, 'with',
+                     self.num_total_evaluations, 'total evaluations, ',
+                     self.num_unique_configurations, 'unique configurations',
+                     self.num_unique_fidelities, 'unique fidelities')
 
 # an evaluation is a tuple of (configuration, fidelities, responses), where
 # configuration is a [list of floats] representing the hyperparameter values
