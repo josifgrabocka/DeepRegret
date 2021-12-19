@@ -7,16 +7,6 @@ class HPOMethod:
     def __init__(self, task_information):
         self.task_information = task_information
 
-    # suggest the initial configuration to try
-    # returns a list of tuples (configurations, fidelities)
-    # this step is commonly referred to as the acquisition function
-    def suggest_initial(self):
-        pass
-    # observe the response of the initial configurations from self.suggest_initial
-    # returns a list of tuples (configurations, fidelities), where the length of the list is num_configurations
-    def observe_initial(self, configurations, fidelities, responses, runtimes):
-        pass
-
     # suggest a number of next configurations to try
     # returns a list of tuples (configurations, fidelities), where the length of the list is num_configurations
     # this step is commonly referred to as the acquisition function
