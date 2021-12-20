@@ -1,4 +1,4 @@
-from MFBenchmark.Utilities.LoadBenchmark import LoadBenchmark
+from MFBenchmark.utilities.LoadBenchmark import LoadBenchmark
 
 
 # load the benchmarks
