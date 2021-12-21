@@ -48,7 +48,7 @@ class Task:
         # return a list of the unique configurations
         return list(set(configs))
 
-    # return the unique fidelities of a configuraiton, either universally configurations=None,
+    # return the unique fidelities of a configuration
     # or belonging to one particular configuration
     def fetch_unique_fidelities(self, configuration):
         # read all the configurations in a list
