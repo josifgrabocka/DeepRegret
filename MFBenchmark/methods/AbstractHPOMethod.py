@@ -3,8 +3,10 @@
 class AbstractHPOMethod:
 
     # initialize a HPO method providing task information and the budget as contructor informaiton
-    def __init__(self, task_information, max_trials=None, max_wallclock_time=None):
+    def __init__(self, task_information, config_space=None, fidel_space=None, max_trials=None, max_wallclock_time=None):
         self.task_information = task_information
+        self.config_space = config_space
+        self.fidel_space = fidel_space
         # store the budget
         self.max_num_trials = max_trials
         self.max_wallclock_time = max_wallclock_time
