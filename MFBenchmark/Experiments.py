@@ -29,7 +29,7 @@ class Experiments:
 
         return metadataset_method_hpo_results
 
-    # create the metric time curves
+    # create the metric time curves given the results
     def metric_time_curves(self, metadataset_method_hpo_results=None, metrics=['regret', 'rank']):
         pass
 
