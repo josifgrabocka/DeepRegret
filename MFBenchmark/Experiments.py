@@ -13,7 +13,6 @@ class Experiments:
         metadataset_method_hpo_results = []
 
         for task in metadataset.tasks:
-
             # create an instance of the method class with the task information, config and fidelities spaces,
             # as well as the budget information
             method = method_class(taskinformation=task.task_information,

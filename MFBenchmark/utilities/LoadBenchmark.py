@@ -4,7 +4,6 @@ from MFBenchmark.Benchmark import Task
 
 
 # utility script to load a multi-fidelity benchmark
-
 class LoadBenchmark:
 
     def __init__(self, lc_bench_location=None, taskset_location=None, nb201_location=None):
