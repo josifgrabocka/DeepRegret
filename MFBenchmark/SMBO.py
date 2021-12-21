@@ -14,7 +14,7 @@ class SMBO:
 
     # run the HPO
     # returns a list of (configuration, fidelities, response, elapsed_time)
-    def run_hpo(self):
+    def run(self):
 
         # the HPO history of every step, the list of configurations, the associated fidelities,
         # and the corresponding reponses and wallclock times
