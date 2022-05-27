@@ -67,30 +67,32 @@ class Task:
         else:
             for eval in self.evaluations:
                 if eval.configuration == configuration and eval.fidelities == fidelities:
-                    return eval.response, eval.runtime
+                    return eval.response_series, eval.runtime_series
             # evaluation not found
             return None
 
 # encapsulate the information about a task, that are needed by HPO methods to decide on the initial design
 # what configurations and fidelities to suggest, etc.
 class TaskInformation:
+
+    __task = None
+
     def __init__(self, task=None, is_continuous=False):
-        self.task = task
+        self.__task = task
         self.is_continuous = is_continuous
 
-        if task is not None:
+        if self.__task is not None:
             # the feasible configurations for non-continuous spaces
             if not self.is_continuous:
-
-                # the list of the unique configurations in the task
-                self.feasible_configurations = None
-                # the unique fidelities for each configuration
-                self.feasible_fidelities = []
-
                 # the unique configurations among the ones evaluated in the task, derived from the self.evaluations
-                self.feasible_configurations = self.task.fetch_unique_configurations()
+                self.feasible_configurations = self.__task.fetch_unique_configurations()
+                # create empty dictionary of the fidelities per config
+                self.feasible_fidelities_per_config = {}
                 for config in self.feasible_configurations:
-                    self.feasible_fidelities.append(self.task.fetch_unique_fidelities(config))
+                    self.feasible_fidelities_per_config[config] = set()
+                # store the unique values of the fidelities for each configuration
+                for eval in self.__task.evaluations:
+                    self.feasible_fidelities_per_config[eval.configuration].add(eval.fidelities)
 
 # an evaluation is a tuple of (configuration, fidelities, response, runtime), where
 # configuration is a Configuration from the ConfigSpace library
@@ -99,10 +101,10 @@ class TaskInformation:
 # auxiliary_responses "list of [float]" indicate the auxiliary responses of evaluating a configuration at the respective fidelities, e.g. training loss, accuracy, etc.
 # runtime [float] indicate the wallclock runtime in seconds of evaluating a configuration at the respective fidelities
 class Evaluation:
-    def __init__(self, configuration=None, fidelities=None, response=None, runtime=None, auxiliary_responses=None):
+    def __init__(self, configuration=None, fidelities=None, val_response=None, test_response=None, runtime=None, auxiliary_responses=None):
         self.configuration = configuration
         self.fidelities = fidelities
-        self.response = response
+        self.val_response = val_response
+        self.test_response = test_response
         self.auxiliary_responses = auxiliary_responses
-        self.response = response
         self.runtime = runtime
