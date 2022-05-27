@@ -62,7 +62,6 @@ class BenchmarkInterface:
 
             for config_idx in range(n_configs):
                 config = bench.query(dataset_name=dataset_name, tag='config', config_id=config_idx)
-
                 epoch_series = bench.query(dataset_name=dataset_name, tag='epoch', config_id=config_idx)
                 runtime_series = bench.query(dataset_name=dataset_name, tag='time', config_id=config_idx)
 
@@ -81,15 +80,14 @@ class BenchmarkInterface:
                 for i in range(len(epoch_series)):
 
                     try:
-                        fid = CSH.Configuration(configuration_space=fidelity_config_space,
-                                                values={'epoch': epoch_series[i]})
+                        fid = CSH.Configuration(configuration_space=fidelity_config_space, values={'epoch': epoch_series[i]})
                         val_response = val_response_series[i]
                         test_response = test_response_series[i]
                         runtime = runtime_series[i]
                         # store the auxiliary response
                         auxiliary_responses = []
                         for aux_response_series in aux_responses_series:
-                            auxiliary_responses.append( aux_response_series[i])
+                            auxiliary_responses.append(aux_response_series[i])
 
                         evals.append(Evaluation(configuration=config,
                                                 fidelities=fid,
@@ -97,6 +95,7 @@ class BenchmarkInterface:
                                                 test_response=test_response,
                                                 runtime=runtime,
                                                 auxiliary_responses=auxiliary_responses))
+
                     except ValueError as ve:
                         print(ve)
 
