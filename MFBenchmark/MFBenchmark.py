@@ -1,7 +1,7 @@
 
 # a benchmark is a collection of meta-datasets
 # metadatasets: is a list of instances from the MetaDataset class
-class Benchmark:
+class MFBenchmark:
     def __init__(self, name=None, metadatasets=None):
         self.name = name
         # the collection of meta-datasets
@@ -9,7 +9,7 @@ class Benchmark:
 
 # a meta-dataset is a collection of evaluations in different tasks
 # config_space: is an instance from the https://automl.github.io/ConfigSpace/master/ class
-# config_space: is an instance from the https://automl.github.io/ConfigSpace/master/ class
+# fidel_space: is an instance from the https://automl.github.io/ConfigSpace/master/ class
 # tasks: is a list of instances from the Task class
 # is_progressive: a boolean setting that indicates that the fidel_space is progressive
 class MetaDataset:
@@ -23,7 +23,7 @@ class MetaDataset:
 
 # a task represents the evaluations of configurations on a dataset
 # evaluations: is a list of Evaluation class instances
-# continous_surrogate: a function that takes as an input a configuration and a fidelity, both Configuration instances
+# continuous_surrogate: a function that takes as an input a configuration and a fidelity, both Configuration instances
 class Task:
     def __init__(self, name=None, evaluations=None, continuous_surrogate=None):
         self.name = name
@@ -94,12 +94,15 @@ class TaskInformation:
 
 # an evaluation is a tuple of (configuration, fidelities, response, runtime), where
 # configuration is a Configuration from the ConfigSpace library
-# configuration is a Configuration from the ConfigSpace library
-# response [float] indicate the response of evaluating a configuration at the respective fidelities
+# fidelities is a Configuration from the ConfigSpace library
+# response [float] indicate the response of evaluating a configuration at the respective fidelities, e.g. validation accuracy
+# auxiliary_responses "list of [float]" indicate the auxiliary responses of evaluating a configuration at the respective fidelities, e.g. training loss, accuracy, etc.
 # runtime [float] indicate the wallclock runtime in seconds of evaluating a configuration at the respective fidelities
 class Evaluation:
-    def __init__(self, configuration=None, fidelities=None, response=None, runtime=None):
+    def __init__(self, configuration=None, fidelities=None, response=None, runtime=None, auxiliary_responses=None):
         self.configuration = configuration
         self.fidelities = fidelities
+        self.response = response
+        self.auxiliary_responses = auxiliary_responses
         self.response = response
         self.runtime = runtime

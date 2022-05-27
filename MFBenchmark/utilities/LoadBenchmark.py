@@ -1,6 +1,6 @@
-from MFBenchmark.Benchmark import Benchmark
-from MFBenchmark.Benchmark import MetaDataset
-from MFBenchmark.Benchmark import Task
+from MFBenchmark.MFBenchmark import MFBenchmark
+from MFBenchmark.MFBenchmark import MetaDataset
+from MFBenchmark.MFBenchmark import Task
 
 
 # utility script to load a multi-fidelity benchmark
@@ -16,7 +16,7 @@ class LoadBenchmark:
         if nb201_location is not None:
             metadatasets.append(self.load_NB201(nb201_location))
 
-        self.benchmark = Benchmark(name='RELEA-MF-Bench', metadatasets=metadatasets)
+        self.benchmark = MFBenchmark(name='RELEA-MF-Bench', metadatasets=metadatasets)
 
     # load the LCBench benchmark
     def load_LCBench(self, lc_bench_location):
@@ -47,3 +47,4 @@ class LoadBenchmark:
         # here load the NB201 metadataset
 
         return md
+

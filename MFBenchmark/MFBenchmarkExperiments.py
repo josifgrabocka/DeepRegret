@@ -1,14 +1,14 @@
 from MFBenchmark.SMBO import SMBO
 
 # evaluate a list of methods on a benchmark
-class Experiments:
+class MFBenchmarkExperiments:
 
     def __init__(self):
         pass
 
     # run the experiments for running a method_class on all the tasks of a metadataset, given a budget
     # returns a list of lists of (config, fidelities, response, elapsed_wallclock_time_in_seconds)
-    def run_hpo_experiments(metadataset=None, method_class=None, max_trials=None, max_wallclock_time=None):
+    def run_mf_hpo_benchmark_experiments(metadataset=None, method_class=None, max_trials=None, max_wallclock_time=None):
 
         metadataset_method_hpo_results = []
 
