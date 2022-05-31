@@ -94,6 +94,7 @@ class TaskInformation:
                 for eval in self.__task.evaluations:
                     self.feasible_fidelities_per_config[eval.configuration].add(eval.fidelities)
 
+
 # an evaluation is a tuple of (configuration, fidelities, response, runtime), where
 # configuration is a Configuration from the ConfigSpace library
 # fidelities is a Configuration from the ConfigSpace library

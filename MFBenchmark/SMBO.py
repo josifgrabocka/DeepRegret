@@ -12,8 +12,9 @@ class SMBO:
         self.max_num_trials = max_trials
         self.max_wallclock_time = max_wallclock_time
 
+
     # run the HPO
-    # returns a list of (configuration, fidelities, response, elapsed_time)
+    # returns a tuple with keys (configuration, fidelities, response, elapsed_time)
     def run(self):
 
         # the HPO history of every step, the list of configurations, the associated fidelities,
@@ -55,6 +56,7 @@ class SMBO:
                 elapsed_num_trials += 1
                 # update the history
                 hpo_history.append((conf, fid, response, elapsed_wallclock_time))
+
 
             # return the observation of the initial design to the method, measure the elapsed time
             start_time = datetime.datetime.now()
