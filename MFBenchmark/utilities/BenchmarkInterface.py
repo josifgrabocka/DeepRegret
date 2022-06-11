@@ -99,7 +99,7 @@ class BenchmarkInterface:
                     except ValueError as ve:
                         print(ve)
 
-            tasks.append(Task(name=dataset_name, evaluations=evals))
+            tasks.append(Task(name=dataset_name, eval_list=evals))
 
         return MetaDataset(name='lcbench', config_space=hp_config_space, fidel_space=fidelity_config_space, tasks=tasks)
 

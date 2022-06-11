@@ -22,22 +22,23 @@ class MetaDataset:
         self.tasks = tasks
 
 # a task represents the evaluations of configurations on a dataset
-# evaluations: is a list of Evaluation class instances
-# continuous_surrogate: a function that takes as an input a configuration and a fidelity, both Configuration instances
+# eval_list: is a list of Evaluation class instances
+# eval_function: a function that takes as an input a configuration and a fidelity, both Configuration instances and evaluates
+# notice that either the task will have an eval_function, or an eval_list, but not both
 class Task:
-    def __init__(self, name=None, evaluations=None, continuous_surrogate=None):
+    def __init__(self, name=None, eval_list=None, eval_function=None):
         self.name = name
         # the list of evaluations in the form of instances of the Evaluation class
-        self.evaluations = evaluations
+        self.evaluations = eval_list
 
         # is the task a continuous or discrete one, if continuous
-        self.is_continuous = False
-        if evaluations is None and continuous_surrogate is not None:
-            self.is_continuous = True
-            self.continuous_surrogate = continuous_surrogate
+        self.has_eval_function = False
+        if eval_list is None and eval_function is not None:
+            self.has_eval_function = True
+            self.eval_function = eval_function
 
         # initialize the task_information class that encapsulates the derived information on this task
-        self.task_information = TaskInformation(task=self, is_continuous=self.is_continuous)
+        self.task_information = TaskInformation(task=self, is_continuous=self.has_eval_function)
 
     # return the unique configurations of the task
     def fetch_unique_configurations(self):
@@ -62,8 +63,8 @@ class Task:
     # return the response and runtime of a configuration at the given fidelity, if not found return None
     def evaluate(self, configuration, fidelities):
         # querying the continuous surrogate
-        if self.is_continuous:
-            return self.continuous_surrogate(configuration=configuration, fidelities=fidelities)
+        if self.has_eval_function:
+            return self.eval_function(configuration=configuration, fidelities=fidelities)
         else:
             for eval in self.evaluations:
                 if eval.configuration == configuration and eval.fidelities == fidelities:
